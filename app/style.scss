@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.grid-container {
+  margin-top: 10vh;
+  display: inline-grid;
+  grid-template-rows: repeat(20, 2rem);
+  grid-template-columns: repeat(15, 2rem);
+  grid-gap: 1px;
+  border: solid black 1px;
+}
+
+.grid-item {
+  border: solid black 3px;
+}
+
+// .button {
+// }
+
+.tetromino {
+  background-color: red;
+}

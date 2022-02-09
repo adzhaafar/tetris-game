@@ -8,13 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
         gridSquares.classList.add('grid-item')
         gridSquares.innerHTML = i;
     }
-    // generate invisible helper grids
-    for (let i = 0; i < 15; i++) {
-        const gridSquaresEnd = document.createElement("div");
-        grid.appendChild(gridSquaresEnd);
-        gridSquaresEnd.classList.add('grid-taken');
-    }
-
 
     //grabbing html stuff 
     var squares = Array.from(document.querySelectorAll('.grid-item'));
@@ -62,20 +55,36 @@ document.addEventListener('DOMContentLoaded', () => {
     var whichTetramino = tetraminos[Math.floor(Math.random() * tetraminos.length)];
     var tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)];
 
-    // let tetraminoPiece = Math.floor(Math.random() * tetraminos.length);
-    // let tetraminoPieceIndex = Math.floor(Math.random() * tetraminoPiece.length)
-    // let randomTetramino = tetraminos[tetraminoPiece][tetraminoPieceIndex]
+    //assign functions to keycodes
+
+    function control(e) {
+        if (e.keyCode === 37) {
+            moveLeft();
+        } else if (e.keyCode === 38) {
+            //rotate
+        } else if (e.keyCode === 39) {
+            moveRight();
+        } else if (e.keyCode === 40) {
+            moveDown();
+        }
+    }
+    document.addEventListener('keyup', control);
 
     //set timer (move piece down every second)
+   
+    const startGame = true;
     const timerId = setInterval(moveDown, 1000);
+    var width = 15;
 
+    
     // move tetraminos down on the grid
-    function moveDown() {  
-        undraw();
-        currentIndex += 15;
-        draw();
-        freeze();
+    function moveDown() {
+            undraw();
+            currentIndex += 15;
+            draw();
+            freeze();
     };
+
 
     // The draw function
     function draw() {
@@ -97,15 +106,41 @@ document.addEventListener('DOMContentLoaded', () => {
         tetraminoRotation.forEach((index) => {
             if ((index + currentIndex) >= 285) {
                 clearInterval(timerId);
-            } 
-            
-        })
+            }
+        });
      
     };
 
+    //move the tetromino left, unless is at the edge or there is
+    function moveLeft() {
+        undraw()
+        //check widths
+        const isAtLeftEdge = tetraminoRotation.some(index => (currentIndex + index) % width === 0);
 
-    
+        if (!isAtLeftEdge) {
+            currentIndex -= 1
+        };
+        
+        if (currentIndex.some(index => squares[currentIndex + index].classList.contains('taken'))) {
+            currentIndex += 1;
+        };
+        draw();
+    };
 
 
+    function moveRight() {
+        undraw();
+        const isAtRightEdge = tetraminoRotation.some(index => (currentIndex + index) % width === width - 1);
+
+        if (!isAtRightEdge) {
+            currentPosition += 1;
+        };
+        
+        if (currentIndex.some(index => squares[currentIndex + index].classList.contains('taken'))) {
+            currentIndex -= 1;
+        };
+        draw();
+    }
 
 });
+

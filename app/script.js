@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     //grabbing html stuff 
-    let squares = Array.from(document.querySelectorAll('.grid-item'));
+    var squares = Array.from(document.querySelectorAll('.grid-item'));
     const scoreDisplay = document.querySelector('#score');
     const startBtn = document.querySelector('#start-btn');
    
@@ -54,57 +54,58 @@ document.addEventListener('DOMContentLoaded', () => {
         [1, 2, 3, 4],
     ];
 
-    //Array of tetrominos
+    //Array of tetraminos
     const tetraminos = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
 
-    // variables for the functions
-    let currentIndex = 0;
-    let whichTetramino = tetraminos[Math.floor(Math.random() * tetraminos.length)];
-    let tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)];
+    // variables for the functions (make them global)
+    var currentIndex = 5; //middle of the board
+    var whichTetramino = tetraminos[Math.floor(Math.random() * tetraminos.length)];
+    var tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)];
 
+    // let tetraminoPiece = Math.floor(Math.random() * tetraminos.length);
+    // let tetraminoPieceIndex = Math.floor(Math.random() * tetraminoPiece.length)
+    // let randomTetramino = tetraminos[tetraminoPiece][tetraminoPieceIndex]
 
     //set timer (move piece down every second)
     const timerId = setInterval(moveDown, 1000);
 
     // move tetraminos down on the grid
-    function moveDown() {
+    function moveDown() {  
         undraw();
         currentIndex += 15;
-        // freeze();
         draw();
-    }
-
+        freeze();
+    };
 
     // The draw function
     function draw() {
         tetraminoRotation.forEach(index => {
-            squares[currentIndex + index].classList.add('tetromino');
+            squares[currentIndex + index].classList.add('tetramino');
         });
-      
     };
 
     // The undraw function
-    function undraw() {
+    function undraw() { 
         tetraminoRotation.forEach(index => {
-            squares[currentIndex + index].classList.remove('tetromino')
+            squares[currentIndex + index].classList.remove('tetramino');
         });
     };
-
-
-
-    //make tetrominos stop at the bottom of the page
     
+     
+    //make tetrominos stop at the bottom of the page
     function freeze() {
-        if (tetraminoRotation.some((index) => {
-            squares[index + 15].classList.contains('grid-taken');
-        })) {
-            tetraminoRotation.forEach((index) => {
-                squares[index].classList.add('grid-freeze')
-                console.log(squares[index].classList)
-            })
-        }
-           
-
+        tetraminoRotation.forEach((index) => {
+            if ((index + currentIndex) >= 285) {
+                clearInterval(timerId);
+            } 
+            
+        })
+     
     };
+
+
+    
+
+
 
 });

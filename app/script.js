@@ -5,8 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < 300; i++) {
         const gridSquares = document.createElement("div");
         grid.appendChild(gridSquares);
-        gridSquares.classList.add('grid-item')
+        gridSquares.classList.add('grid-item');
         gridSquares.innerHTML = i;
+    }
+
+    //generate grid for "upcoming shape" for the user (4x4 squares)
+    const miniGrid = document.querySelector('.mini-grid');
+    for (let i = 0; i < 16; i++) {
+        const gridMiniSquares = document.createElement('div');
+        miniGrid.appendChild(gridMiniSquares);
+        gridMiniSquares.classList.add('mini-grid-item');
+        gridMiniSquares.innerHTML = i;
     }
 
     //grabbing html stuff 
@@ -53,37 +62,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // variables for the functions (make them global)
     var currentIndex = 5; //middle of the board
     var whichTetramino = tetraminos[Math.floor(Math.random() * tetraminos.length)];
+    var shape = 0;
     var tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)];
 
     //assign functions to keycodes
-
     function control(e) {
         if (e.keyCode === 37) {
             moveLeft();
         } else if (e.keyCode === 38) {
-            //rotate
+            rotate();
         } else if (e.keyCode === 39) {
             moveRight();
         } else if (e.keyCode === 40) {
             moveDown();
         }
     }
+
+    //Event listeners
     document.addEventListener('keyup', control);
 
     //set timer (move piece down every second)
-   
-    const startGame = true;
     const timerId = setInterval(moveDown, 1000);
-    var width = 15;
+    var width = 15; //width of the grid
 
     
     // move tetraminos down on the grid
     function moveDown() {
-            undraw();
-            currentIndex += 15;
-            draw();
-            freeze();
+        undraw();
+        currentIndex += width;
+        draw();
+        freeze();
     };
+
 
 
     // The draw function
@@ -111,10 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
      
     };
 
-    //move the tetromino left, unless is at the edge or there is
+    //move the tetromino left, unless is at the edge or there is another piece
     function moveLeft() {
         undraw()
-        //check widths
+        //check if it is at the edge
         const isAtLeftEdge = tetraminoRotation.some(index => (currentIndex + index) % width === 0);
 
         if (!isAtLeftEdge) {
@@ -127,13 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
         draw();
     };
 
-
+    //move the tetromino right, unless there is an edge or another piece
     function moveRight() {
         undraw();
         const isAtRightEdge = tetraminoRotation.some(index => (currentIndex + index) % width === width - 1);
 
         if (!isAtRightEdge) {
-            currentPosition += 1;
+            currentIndex += 1;
         };
         
         if (currentIndex.some(index => squares[currentIndex + index].classList.contains('taken'))) {
@@ -142,5 +152,20 @@ document.addEventListener('DOMContentLoaded', () => {
         draw();
     }
 
+    
+    function rotate() {
+        undraw();
+        let currentRotation = 0;
+        currentRotation++;
+        if (currentRotation === whichTetramino.length) {
+            currentRotation = 0;
+        }
+        whichTetramino[currentRotation];
+        draw();
+    }
+
+
+//make pieces go after the first one is dropped fully (after clear inverval)
+    // fix the rotate function cause it doesnt work
 });
 

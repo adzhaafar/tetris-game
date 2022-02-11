@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.grid-container {
+  margin-top: 10vh;
+  display: -ms-inline-grid;
+  display: inline-grid;
+  -ms-grid-rows: (2rem)[20];
+      grid-template-rows: repeat(20, 2rem);
+  -ms-grid-columns: (2rem)[15];
+      grid-template-columns: repeat(15, 2rem);
+  grid-gap: 1px;
+  border: solid black 1px;
+}
+
+.grid-item {
+  border: solid black 3px;
+}
+
+.tetramino {
+  background-color: red;
+}
+/*# sourceMappingURL=style.css.map */

@@ -19,53 +19,105 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //grabbing html stuff 
-    var squares = Array.from(document.querySelectorAll('.grid-item'));
+    var squares = Array.from(document.querySelectorAll('.grid-item')); //array of 300  generated squares
     const scoreDisplay = document.querySelector('#score');
     const startBtn = document.querySelector('#start-btn');
    
-    // Tetrominos (each of the small indices represents a cube on the grid (an array with 4 arrays inside it, each array is a version of rotation of the piece))
-
-    // The L tetromino
+// Tetrominos (array representing shape, with multiple arrays each representing shape's rotation)
+    // The L tetramino
     const lTetromino = [
         [2, 1, 16, 31],
         [1, 2, 3, 18],
         [1, 16, 31, 30],
         [15, 16, 17, 2],
     ];
-    // The Z tetromino
+    // The Z tetramino
     const zTetromino = [
         [1, 2, 17, 18],
         [1, 16, 17, 32],
         [15, 16, 1, 2],
         [2, 17, 16, 31],
     ];
-    // The T tetromino
+    // The T tetramino
     const tTetromino = [
         [1, 2, 3, 17],
         [1, 16, 31, 15],
         [15, 16, 17, 1],
         [1, 16, 31, 17],
     ];
-    //only 1 rotation because it is a block
+    //The O tetramino, only 1 rotation because it is a square
     const oTetromino = [
         [1, 2, 16, 17],
     ];
-    //only 2 rotations because it is a line
+    //The I tetramino, only 2 rotations because it is a line
     const iTetromino = [
         [1, 16, 31, 46],
         [1, 2, 3, 4],
     ];
-
     //Array of tetraminos
     const tetraminos = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
 
-    // variables for the functions (make them global)
+    // variables for the functions (make them global to use all throughout)
     var currentIndex = 5; //middle of the board
-    var whichTetramino = tetraminos[Math.floor(Math.random() * tetraminos.length)];
-    var shape = 0;
-    var tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)];
+    var whichTetramino = tetraminos[Math.floor(Math.random() * tetraminos.length)]; //random shape
+    var tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)]; //random rotation of that shape
+    var width = 15; //width of the grid
+    var playGame = true;
 
-    //assign functions to keycodes
+
+    
+
+
+    //while playGame is true keep drawing new shapes when hitting the bottom of grid
+    var timerId = setInterval(moveDown, 1000);
+    
+    function mainMovement() {
+        draw();
+        timerId;
+    }
+
+
+    //function that executes what needs to be done every second
+    function moveDown() {
+        undraw();
+        currentIndex += width;
+        draw();
+        freeze();
+    };   
+
+    mainMovement();
+
+
+//Helper functions
+
+    // The draw function (adds tetramino class to appropriate squares, colouring them, making a tetramino appear)
+    function draw() {
+        tetraminoRotation.forEach(index => {
+            squares[currentIndex + index].classList.add('tetramino');
+        });
+    };
+
+    // The undraw function (removes tetramino class from appropriate squares, making them blank, tetramino dissapears)
+    function undraw() { 
+        tetraminoRotation.forEach(index => {
+            squares[currentIndex + index].classList.remove('tetramino');
+        });
+    };
+    
+    //make tetrominos stop at the bottom of the page (when squares readhed the last line)
+    function freeze() {
+        tetraminoRotation.forEach((index) => {
+            if ((index + currentIndex) >= 285) {
+                clearInterval(timerId);
+            } 
+        });
+     
+    };
+
+    //Event listeners
+    document.addEventListener('keyup', control); 
+
+        //assign functions to keycodes (moving left, right, down, rotating piece through arrowkeys)
     function control(e) {
         if (e.keyCode === 37) {
             moveLeft();
@@ -76,51 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (e.keyCode === 40) {
             moveDown();
         }
-    }
+    };
 
-    //Event listeners
-    document.addEventListener('keyup', control);
-
-    //set timer (move piece down every second)
-    const timerId = setInterval(moveDown, 1000);
-    var width = 15; //width of the grid
-
+//Functions responding to user arrowkeys (move left, right or rotate)
     
-    // move tetraminos down on the grid
-    function moveDown() {
-        undraw();
-        currentIndex += width;
-        draw();
-        freeze();
-    };
-
-
-
-    // The draw function
-    function draw() {
-        tetraminoRotation.forEach(index => {
-            squares[currentIndex + index].classList.add('tetramino');
-        });
-    };
-
-    // The undraw function
-    function undraw() { 
-        tetraminoRotation.forEach(index => {
-            squares[currentIndex + index].classList.remove('tetramino');
-        });
-    };
-    
-     
-    //make tetrominos stop at the bottom of the page
-    function freeze() {
-        tetraminoRotation.forEach((index) => {
-            if ((index + currentIndex) >= 285) {
-                clearInterval(timerId);
-            }
-        });
-     
-    };
-
     //move the tetromino left, unless is at the edge or there is another piece
     function moveLeft() {
         undraw()
@@ -152,20 +163,19 @@ document.addEventListener('DOMContentLoaded', () => {
         draw();
     }
 
-    
-    function rotate() {
-        undraw();
-        let currentRotation = 0;
-        currentRotation++;
-        if (currentRotation === whichTetramino.length) {
-            currentRotation = 0;
-        }
-        whichTetramino[currentRotation];
-        draw();
-    }
+    //fix the rotate function!
+
+    // function rotate() {
+    //     undraw();
+    //     let currentRotation = 0;
+    //     currentRotation++;
+    //     if (currentRotation === whichTetramino.length) {
+    //         currentRotation = 0;
+    //     }
+    //     whichTetramino[currentRotation];
+    //     draw();
+    // }
 
 
-//make pieces go after the first one is dropped fully (after clear inverval)
-    // fix the rotate function cause it doesnt work
 });
 

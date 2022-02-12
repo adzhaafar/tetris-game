@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //generate grid for "upcoming shape" for the user (4x4 squares)
-    const miniGrid = document.querySelector('.mini-grid');
-    for (let i = 0; i < 16; i++) {
-        const gridMiniSquares = document.createElement('div');
-        miniGrid.appendChild(gridMiniSquares);
-        gridMiniSquares.classList.add('mini-grid-item');
-        gridMiniSquares.innerHTML = i;
-    }
+    // const miniGrid = document.querySelector('.mini-grid');
+    // for (let i = 0; i < 16; i++) {
+    //     const gridMiniSquares = document.createElement('div');
+    //     miniGrid.appendChild(gridMiniSquares);
+    //     gridMiniSquares.classList.add('mini-grid-item');
+    //     gridMiniSquares.innerHTML = i;
+    // }
 
     //grabbing html stuff 
     var squares = Array.from(document.querySelectorAll('.grid-item')); //array of 300  generated squares
@@ -62,57 +62,32 @@ document.addEventListener('DOMContentLoaded', () => {
     var whichTetramino = tetraminos[Math.floor(Math.random() * tetraminos.length)]; //random shape
     var tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)]; //random rotation of that shape
     var width = 15; //width of the grid
-    var playGame = true;
-
-
-    
-
-
-    //while playGame is true keep drawing new shapes when hitting the bottom of grid
-    var timerId = setInterval(moveDown, 1000);
-    
-    function mainMovement() {
-        draw();
-        timerId;
-    }
-
-
-    //function that executes what needs to be done every second
-    function moveDown() {
-        undraw();
-        currentIndex += width;
-        draw();
-        freeze();
-    };   
 
     mainMovement();
 
-
-//Helper functions
-
-    // The draw function (adds tetramino class to appropriate squares, colouring them, making a tetramino appear)
-    function draw() {
-        tetraminoRotation.forEach(index => {
-            squares[currentIndex + index].classList.add('tetramino');
-        });
-    };
-
-    // The undraw function (removes tetramino class from appropriate squares, making them blank, tetramino dissapears)
-    function undraw() { 
-        tetraminoRotation.forEach(index => {
-            squares[currentIndex + index].classList.remove('tetramino');
-        });
-    };
+    //while playGame is true keep drawing new shapes when hitting the bottom of grid
     
-    //make tetrominos stop at the bottom of the page (when squares readhed the last line)
-    function freeze() {
-        tetraminoRotation.forEach((index) => {
-            if ((index + currentIndex) >= 285) {
-                clearInterval(timerId);
-            } 
-        });
-     
+    function mainMovement() {
+        toggleTetramino(); //draw tetramino
+        let counter = 0;
+        var i = setInterval(function () {
+            toggleTetramino() //undraw tetramino
+            currentIndex += width;
+            toggleTetramino(); //draw tetramino
+            counter++;
+            if (currentIndex > 270 && counter === 18) {
+                clearInterval(i);
+            }
+        }, 1000);
     };
+
+    //this function adds and removes a tetramino class when it is there or not, drawing the shape
+    function toggleTetramino() {
+        tetraminoRotation.forEach(index => {
+            squares[currentIndex + index].classList.toggle('tetramino');
+        })
+    }
+  
 
     //Event listeners
     document.addEventListener('keyup', control); 
@@ -125,57 +100,43 @@ document.addEventListener('DOMContentLoaded', () => {
             rotate();
         } else if (e.keyCode === 39) {
             moveRight();
-        } else if (e.keyCode === 40) {
-            moveDown();
-        }
+        } 
     };
 
 //Functions responding to user arrowkeys (move left, right or rotate)
     
     //move the tetromino left, unless is at the edge or there is another piece
     function moveLeft() {
-        undraw()
+        toggleTetramino();
         //check if it is at the edge
         const isAtLeftEdge = tetraminoRotation.some(index => (currentIndex + index) % width === 0);
-
+        //subtract 1 from current index
         if (!isAtLeftEdge) {
             currentIndex -= 1
         };
         
-        if (currentIndex.some(index => squares[currentIndex + index].classList.contains('taken'))) {
-            currentIndex += 1;
-        };
-        draw();
+        // if (currentIndex.some(index => squares[currentIndex + index].classList.contains('taken'))) {
+        //     currentIndex += 1;
+        // };
+        toggleTetramino();
     };
 
     //move the tetromino right, unless there is an edge or another piece
     function moveRight() {
-        undraw();
+        toggleTetramino();
+        //check if at the right edge
         const isAtRightEdge = tetraminoRotation.some(index => (currentIndex + index) % width === width - 1);
-
+        //add 1 to current index
         if (!isAtRightEdge) {
             currentIndex += 1;
         };
         
-        if (currentIndex.some(index => squares[currentIndex + index].classList.contains('taken'))) {
-            currentIndex -= 1;
-        };
-        draw();
+        // if (currentIndex.some(index => squares[currentIndex + index].classList.contains('taken'))) {
+        //     currentIndex -= 1;
+        // };
+        toggleTetramino();
     }
-
-    //fix the rotate function!
-
-    // function rotate() {
-    //     undraw();
-    //     let currentRotation = 0;
-    //     currentRotation++;
-    //     if (currentRotation === whichTetramino.length) {
-    //         currentRotation = 0;
-    //     }
-    //     whichTetramino[currentRotation];
-    //     draw();
-    // }
-
+    //function rotate
 
 });
 

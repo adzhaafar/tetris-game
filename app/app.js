@@ -44,15 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Array of tetraminos
     const tetraminos = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
-
     var currentIndex = 5; //middle of the board
-    var width = 15; //width of the grid
+    const width = 15; //width of the grid
 
 
 
 
 
-    //draw random tetramino
+    //choose random tetramino
     function drawRandomTetramino() {
         let whichTetramino = tetraminos[Math.floor(Math.random() * tetraminos.length)];
         let tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)];
@@ -60,34 +59,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    //draw and undraw the tetramino
-    function toggleTetramino(callback) {
-        callback().forEach(index => {
+    //draw and undraw the tetramino (by calling the class on and off)
+    function toggleTetramino(tetramino) {
+        tetramino.forEach(index => {
             squares[currentIndex + index].classList.toggle('tetramino');
         });
+        return 1;
     };
 
-    //moves down tetramino 
-    function moveDown(callback) {
-        callback();
+    //moves down tetramino (the callback is toggleTetramino)
+    function moveDown() {
+        toggleTetramino();
         currentIndex += width;
-        callback();
+        toggleTetramino();
         check(currentIndex);
     };
 
+
     //check if at bottom
     function check(index) {
-        if (index >= 285) {
+        if (index >= 284) {
             clearInterval(timerId);
         }
     }
 
+    
+
+    
+    // console.log(drawRandomTetramino());
+
+    function moveDown(tetramino) {
+        toggleTetramino(tetramino);
+        setInterval(() => {
+            toggleTetramino(tetramino);
+            currentIndex += width;
+            toggleTetramino(tetramino);
+        
+        }, 1000);  
+    }
+
+
+
+    moveDown(drawRandomTetramino());
+    // console.log(toggleTetramino(drawRandomTetramino()));
+    // currentIndex += width;
+    // toggleTetramino();
+    // console.log(toggleTetramino(drawRandomTetramino()));
 
     //every second movedown
-    var timerId = setInterval(moveDown(toggleTetramino(drawRandomTetramino)), 1000);
+    // var timerId = setInterval(moveDown, 1000);
     
-    // toggleTetramino(drawRandomTetramino);
-    // moveDown(toggleTetramino(drawRandomTetramino));
-    // toggleTetramino(drawRandomTetramino);
 
 });

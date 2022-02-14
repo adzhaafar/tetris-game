@@ -29,3 +29,8 @@ There is a main function to control it better (repeat this function until the ga
 1. Start the game (draw function)
 2. Run the move function every second
 3. When it is at the end of the grid, freeze the piece in place
+
+Later on:
+when a row is filled, all the pieces need to dissapear and points should be added to the user
+add levels later on
+add nice styling later on

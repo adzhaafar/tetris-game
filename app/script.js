@@ -63,24 +63,29 @@ document.addEventListener('DOMContentLoaded', () => {
     var tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)]; //random rotation of that shape
     var width = 15; //width of the grid
 
-    mainMovement();
+        
 
+    
+    mainMovement();
     //while playGame is true keep drawing new shapes when hitting the bottom of grid
     
     function mainMovement() {
         toggleTetramino(); //draw tetramino
-        let counter = 0;
-        var i = setInterval(function () {
-            toggleTetramino() //undraw tetramino
-            currentIndex += width;
-            toggleTetramino(); //draw tetramino
-            counter++;
-            if (currentIndex > 270 && counter === 18) {
-                clearInterval(i);
-            }
-        }, 1000);
+        var i = setInterval(moveDown, 1000);
+        freeze(currentIndex);
     };
 
+    function moveDown() {
+        toggleTetramino() //undraw tetramino
+        currentIndex += width;
+        toggleTetramino(); //draw tetramino
+    }
+
+    function freeze(currentIndex) {
+        if (currentIndex >= 285) {
+            clearInterval(i);
+        }
+    }
     //this function adds and removes a tetramino class when it is there or not, drawing the shape
     function toggleTetramino() {
         tetraminoRotation.forEach(index => {

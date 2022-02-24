@@ -47,11 +47,17 @@ document.addEventListener('DOMContentLoaded', () => {
     var currentIndex = 5; //middle of the board
     const width = 15; //width of the grid
 
+    //selectors 
+    const startBtn = document.querySelector('.start-btn');
+    const scoreDisplay = document.querySelector('.score');
+
+
+    //event listeners
+    startBtn.addEventListener('click', moveDown);
 
 
 
-
-    //choose random tetramino
+    //choose random tetramino and return it
     function drawRandomTetramino() {
         let whichTetramino = tetraminos[Math.floor(Math.random() * tetraminos.length)];
         let tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)];
@@ -64,50 +70,29 @@ document.addEventListener('DOMContentLoaded', () => {
         tetramino.forEach(index => {
             squares[currentIndex + index].classList.toggle('tetramino');
         });
-        return 1;
-    };
-
-    //moves down tetramino (the callback is toggleTetramino)
-    function moveDown() {
-        toggleTetramino();
-        currentIndex += width;
-        toggleTetramino();
-        check(currentIndex);
     };
 
 
-    //check if at bottom
-    function check(index) {
-        if (index >= 284) {
-            clearInterval(timerId);
-        }
-    }
+    //do movement every second
+    // var timerId = setInterval(moveDown(drawRandomTetramino()), 1000);  
 
-    
-
-    
-    // console.log(drawRandomTetramino());
-
+    //move down piece, use for the set interval 
     function moveDown(tetramino) {
         toggleTetramino(tetramino);
-        setInterval(() => {
-            toggleTetramino(tetramino);
-            currentIndex += width;
-            toggleTetramino(tetramino);
-        
-        }, 1000);  
-    }
+        currentIndex += width;
+        toggleTetramino(tetramino);
+        // check(tetramino);
+    };
 
+    moveDown(drawRandomTetramino())
 
-
-    moveDown(drawRandomTetramino());
-    // console.log(toggleTetramino(drawRandomTetramino()));
-    // currentIndex += width;
-    // toggleTetramino();
-    // console.log(toggleTetramino(drawRandomTetramino()));
-
-    //every second movedown
-    // var timerId = setInterval(moveDown, 1000);
-    
+    //check if at bottom
+    function check(tetramino) {
+        tetramino.forEach(index => {
+            if (squares[currentIndex + index].innerHTML >= 44) {
+                clearInterval(timerId);
+            }
+        });
+    };
 
 });

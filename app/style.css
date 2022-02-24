@@ -3,25 +3,74 @@
   padding: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  background-color: #bffff0;
 }
 
 .grid-container {
-  margin-top: 10vh;
+  margin-left: 8vh;
   display: -ms-inline-grid;
   display: inline-grid;
-  -ms-grid-rows: (2rem)[20];
-      grid-template-rows: repeat(20, 2rem);
-  -ms-grid-columns: (2rem)[15];
-      grid-template-columns: repeat(15, 2rem);
-  grid-gap: 1px;
-  border: solid black 1px;
+  -ms-grid-rows: (2.3rem)[20];
+      grid-template-rows: repeat(20, 2.3rem);
+  -ms-grid-columns: (2.3rem)[15];
+      grid-template-columns: repeat(15, 2.3rem);
+  gap: 0;
+  background-color: #bffff0;
 }
 
-.grid-item {
-  border: solid black 3px;
+.mini-grid {
+  margin-left: 8vh;
+  display: -ms-inline-grid;
+  display: inline-grid;
+  -ms-grid-rows: (2.5rem)[4];
+      grid-template-rows: repeat(4, 2.5rem);
+  -ms-grid-columns: (2.5rem)[4];
+      grid-template-columns: repeat(4, 2.5rem);
+  background-color: #bffff0;
+}
+
+.grid-item,
+.mini-grid-item {
+  border: solid #f9f9f9 3px;
+  border-radius: 3px;
 }
 
 .tetramino {
-  background-color: red;
+  background-color: #ffbbbb;
+  border: solid #76e4ca 2px;
+}
+
+.btns {
+  margin-left: 30px;
+  margin-top: 30px;
+}
+
+.start-btn,
+.resume-btn,
+.pause-btn {
+  background-color: #cab8ff;
+  margin: 10px;
+  padding: 30px;
+  border: solid #f9f9f9 3px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: large;
+  color: #f7dbf0;
+}
+
+.start-btn:hover,
+.resume-btn:hover,
+.pause-btn:hover {
+  background-color: #f7dbf0;
+  color: #cab8ff;
+}
+
+.score {
+  margin-left: 500px;
+  color: #cab8ff;
+}
+
+.score {
+  margin-top: 20px;
 }
 /*# sourceMappingURL=style.css.map */

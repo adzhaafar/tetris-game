@@ -10,18 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //generate grid for "upcoming shape" for the user (4x4 squares)
-    // const miniGrid = document.querySelector('.mini-grid');
-    // for (let i = 0; i < 16; i++) {
-    //     const gridMiniSquares = document.createElement('div');
-    //     miniGrid.appendChild(gridMiniSquares);
-    //     gridMiniSquares.classList.add('mini-grid-item');
-    //     gridMiniSquares.innerHTML = i;
-    // }
+    const miniGrid = document.querySelector('.mini-grid');
+    for (let i = 0; i < 16; i++) {
+        const gridMiniSquares = document.createElement('div');
+        miniGrid.appendChild(gridMiniSquares);
+        gridMiniSquares.classList.add('mini-grid-item');
+        gridMiniSquares.innerHTML = i;
+    }
 
     //grabbing html stuff 
     var squares = Array.from(document.querySelectorAll('.grid-item')); //array of 300  generated squares
-    const scoreDisplay = document.querySelector('#score');
-    const startBtn = document.querySelector('#start-btn');
+    const scoreDisplay = document.querySelector('.score');
+    const startBtn = document.querySelector('.start-btn');
+    const pauseBtn = document.querySelector('.pause-btn');
+    const resumeBtn = document.querySelector('.resume-btn');
    
 // Tetrominos (array representing shape, with multiple arrays each representing shape's rotation)
     // The L tetramino
@@ -62,17 +64,26 @@ document.addEventListener('DOMContentLoaded', () => {
     var whichTetramino = tetraminos[Math.floor(Math.random() * tetraminos.length)]; //random shape
     var tetraminoRotation = whichTetramino[Math.floor(Math.random() * whichTetramino.length)]; //random rotation of that shape
     var width = 15; //width of the grid
-
         
-
+    //event listeners
+    startBtn.addEventListener('click', mainMovement);
+    pauseBtn.addEventListener('click', freeze);
+    resumeBtn.addEventListener('click', everySecond);
     
-    mainMovement();
+
+    function everySecond() {
+        return setInterval(moveDown, 500)
+    }
     //while playGame is true keep drawing new shapes when hitting the bottom of grid
     
     function mainMovement() {
         toggleTetramino(); //draw tetramino
-        var i = setInterval(moveDown, 1000);
-        freeze(currentIndex);
+        everySecond();
+        tetraminoRotation.forEach(index => {
+            if (squares[currentIndex + index].innerHTML >= 100) {
+                freeze();
+            }
+        });
     };
 
     function moveDown() {
@@ -81,10 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleTetramino(); //draw tetramino
     }
 
-    function freeze(currentIndex) {
-        if (currentIndex >= 285) {
-            clearInterval(i);
-        }
+    function freeze() {
+        clearInterval(everySecond);
     }
     //this function adds and removes a tetramino class when it is there or not, drawing the shape
     function toggleTetramino() {
@@ -94,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
 
-    //Event listeners
+    //Event listener for shape movement
     document.addEventListener('keyup', control); 
 
         //assign functions to keycodes (moving left, right, down, rotating piece through arrowkeys)
@@ -144,4 +153,5 @@ document.addEventListener('DOMContentLoaded', () => {
     //function rotate
 
 });
+
 

@@ -34,3 +34,5 @@ Later on:
 when a row is filled, all the pieces need to dissapear and points should be added to the user
 add levels later on
 add nice styling later on
+
+in order for the piece to stop moving it either has to hit the bottom or be directly next to another piece
